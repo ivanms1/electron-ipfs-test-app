@@ -8,9 +8,10 @@
     "start": "parcel src/index.html --out-dir parcel-dist",
     "build": "parcel build src/index.html --out-dir dist/parcel-build --public-url ./",
     "dev": "concurrently -k \"yarn start\" \"yarn:electron\"",
-    "electron": "wait-on tcp:1234 && tsc && electron .",
-    "make": "yarn build && tsc && electron-builder",
-    "release": "yarn build && tsc && electron-builder --publish=always",
+    "copy-assets": "copyfiles -f \"electron/assets/**/*\" \"dist/assets\"",
+    "electron": "wait-on tcp:1234 && tsc && yarn copy-assets && electron .",
+    "make": "yarn build && tsc && yarn copy-assets && electron-builder",
+    "release": "yarn build && tsc && yarn copy-assets && electron-builder --publish=always",
     "publish": "yarn build && electron-forge publish",
     "lint": "eslint --ext .ts ."
   },
@@ -49,6 +50,7 @@
     "@babel/preset-env": "^7.13.9",
     "@babel/preset-react": "^7.12.13",
     "@parcel/transformer-typescript-tsc": "^2.0.0-alpha.3",
+    "@types/copyfiles": "^2.4.0",
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
@@ -67,8 +69,12 @@
     "wait-on": "^5.2.1"
   },
   "dependencies": {
+    "copyfiles": "^2.4.1",
     "electron-is-dev": "^2.0.0",
     "electron-serve": "^1.1.0",
+    "go-ipfs": "^0.8.0",
+    "ipfs-http-client": "^50.0.0",
+    "ipfsd-ctl": "^8.0.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   }
